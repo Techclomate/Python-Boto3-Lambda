@@ -1,0 +1,15 @@
+import boto3
+
+ec2 = boto3.resource('ec2')
+
+def lambda_handler(event, context):
+    
+    running_instances = ec2.instances.filter(Filters=[{'Name': 'instance-state-name', 'Values': ['running']}])
+    instance_ids = [instance.id for instance in running_instances]
+    
+    if not instance_ids:
+        print("No running instances to terminate.")
+        return
+        
+    ec2.instances.filter(InstanceIds=instance_ids).terminate()
+    print("Instances terminated:", instance_ids)
