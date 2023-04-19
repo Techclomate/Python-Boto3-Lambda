@@ -1,0 +1,7 @@
+import boto3
+
+def lambda_handler(event, context):
+
+    sqs = boto3.resource('sqs')
+    queue = sqs.create_queue(QueueName='test', Attributes={'DelaySeconds': '5'})
+    print(queue.url)
